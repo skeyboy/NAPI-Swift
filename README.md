@@ -18,6 +18,6 @@ you can can **run npm postinstall** to build code, do **npm run test** to exp th
 
 
 **Notice**
-the Trampoline is just for use to register nodejs runtime entry
+@_cdecl("node_swift_register") will use some function as the node module regis entry
 
 

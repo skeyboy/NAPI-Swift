@@ -4,14 +4,13 @@ func hello() -> String {
     return "world"
 }
 
-
 func initHelloWorld(env: OpaquePointer, exports: OpaquePointer) -> OpaquePointer? {
-    return initModule(env, exports, [
-        .function("hello", hello)
-    ])
+    return initModule(
+        env, exports,
+        [
+            .function("hello", hello)
+        ])
 }
-
-
 
 func initCallback(env: OpaquePointer, exports: OpaquePointer) -> OpaquePointer? {
 
@@ -22,8 +21,7 @@ func initCallback(env: OpaquePointer, exports: OpaquePointer) -> OpaquePointer? 
     return initHelloWorld(env: funcResult!, exports: exports)
 }
 
-
-@_cdecl("_init_hello_world")
+@_cdecl("node_swift_register")
 func initClass(env: OpaquePointer, exports: OpaquePointer) -> OpaquePointer? {
 
     let classResult = try! Class(
@@ -42,4 +40,3 @@ func initClass(env: OpaquePointer, exports: OpaquePointer) -> OpaquePointer? {
 
     return classResult
 }
-
