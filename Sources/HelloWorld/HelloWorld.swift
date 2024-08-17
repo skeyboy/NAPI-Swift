@@ -1,14 +1,23 @@
+import CNodeAPI
 import NodeAPI
 
-func hello() -> String {
-    return "world"
+func hello(a: String) -> String {
+    return "world" + a
+}
+func add(a: Int32, b: Int32) -> Int32 {
+    return a + b
 }
 
 func initHelloWorld(env: OpaquePointer, exports: OpaquePointer) -> OpaquePointer? {
+    //     PropertyDescriptor.function<Int32,Int32>("abc",{ (a:Int32,b:Int32) in
+    // return add(a: a, b: b)
+    //     }, attributes: napi_default)
+
     return initModule(
         env, exports,
         [
             .function("hello", hello)
+
         ])
 }
 
@@ -32,8 +41,8 @@ func initClass(env: OpaquePointer, exports: OpaquePointer) -> OpaquePointer? {
         [
             PropertyDescriptor.function(
                 "hello",
-                {
-                    return hello()
+                { a in
+                    return hello(a: a)
                 })
         ]
     ).napiValue(env)

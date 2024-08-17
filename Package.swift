@@ -14,8 +14,10 @@ let package = Package(
         .library(
             name: "NodeAPI",
             targets: ["NodeAPI"]),
+        .library(name: "SwiftNode", targets: ["SwiftNode"]),
         // the example
         .library(name: "HelloWorld", type: .dynamic, targets: ["HelloWorld"]),
+        .library(name: "SwiftNodeDemo", type: .dynamic, targets: ["SwiftNodeDemo"]),
     ],
     targets: [
         // use as the napi module register entry
@@ -25,6 +27,9 @@ let package = Package(
         .target(name: "NodeModuleSupport", dependencies: ["CNodeAPI"]),
         .target(
             name: "NodeAPI", dependencies: ["CNodeAPI", "CNodeAPISupport", "NodeModuleSupport"]),
+        .target(
+            name: "SwiftNode", dependencies: ["CNodeAPI", "CNodeAPISupport", "NodeModuleSupport"]),
+        .target(name: "SwiftNodeDemo", dependencies: ["SwiftNode"]),
     ],
     cxxLanguageStandard: .cxx17
 
