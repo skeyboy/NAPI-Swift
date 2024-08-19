@@ -30,6 +30,9 @@ public enum NativeValue: ValueConvertible, @unchecked Sendable {
             return value
         case .function(let value, _):
             return value
+        case .class(let value, _):
+            return value
+
         }
     }
 
@@ -53,6 +56,8 @@ public enum NativeValue: ValueConvertible, @unchecked Sendable {
             return value
         case .function(_, let value):
             return value
+        case .class(_, let value):
+            return value
         }
     }
 
@@ -65,5 +70,6 @@ public enum NativeValue: ValueConvertible, @unchecked Sendable {
     case null(napi_value?, Bool)
     case undefined(napi_value?, Bool)
     case function(napi_value?, Bool)
+    case `class`(napi_value?, Bool)
 
 }

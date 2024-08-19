@@ -49,21 +49,8 @@ extension Optional: ValueConvertible where Wrapped: ValueConvertible {
     }
 }
 
-// extension Dictionary: ValueConvertible, @unchecked Sendable
-// where Value: NSObjectProtocol & Sendable, Key: ValueConvertible {
-
-//     public init?(_ value: napi_value) async throws {
-//         fatalError("No need")
-//     }
-
-//     public var nativeValue: NativeValue {
-
-//     }
-
-// }
-
 extension Dictionary: @preconcurrency ValueConvertible, @unchecked Sendable
-where Key: ValueConvertible, Value: ValueConvertible {
+where Key: ValueConvertible, Value == any ValueConvertible {
     public init?(_ value: napi_value) throws {
         fatalError("No need")
     }
@@ -79,7 +66,7 @@ where Key: ValueConvertible, Value: ValueConvertible {
         for (key, value) in self
         where key.nativeValue.isValided == true && value.nativeValue.isValided == true {
             status = napi_set_property(
-                env, result, key.nativeValue.native, value.nativeValue.native)
+                NodeContext.context.env, result, key.nativeValue.native, value.nativeValue.native)
             guard status == napi_ok else { return .dictionary(nil, false) }
         }
         return .dictionary(result, status == napi_ok)
@@ -135,7 +122,6 @@ extension String: @preconcurrency ValueConvertible, @unchecked Sendable {
         let status = data.withUnsafeBytes { (bytes: UnsafePointer<Int8>) in
             napi_create_string_utf8(NodeContext.context.env, bytes, data.count, &result)
         }
-        print("\(NodeContext.context.env)====\(status)<====>\(result)")
         return .string(result, status == napi_ok)
 
     }
@@ -179,15 +165,116 @@ extension Bool: @preconcurrency ValueConvertible, @unchecked Sendable {
     }
 }
 
-extension ValueConvertible where Self == Bool {
-    @MainActor public func value(
-        name: String, attributes: NodePropertyDescriptor.Attribute = .default
-    )
-        -> NodePropertyDescriptor
-    {
-        NodePropertyDescriptor.value(
-            name: name, value: self.nativeValue.native,
-            attributes: attributes)
+extension Int: @preconcurrency ValueConvertible, @unchecked Sendable {
 
+    @MainActor public init?(_ value: napi_value) throws {
+        var pValue: Int32 = 0
+        let status = napi_get_value_int32(NodeContext.context.env, value, &pValue)
+        if status != napi_ok {
+            throw NodeError.msg("String")
+        } else {
+            self = Int(pValue)
+        }
+    }
+
+    @MainActor public var nativeValue: NativeValue {
+        var value: napi_value?
+        let pValue: Int32 = Int32(self)
+        let status = napi_create_int32(env, pValue, &value)
+        return .double(value, status == napi_ok)
+    }
+}
+extension UInt: @preconcurrency ValueConvertible, @unchecked Sendable {
+
+    @MainActor public init?(_ value: napi_value) throws {
+        var pValue: UInt32 = 0
+        let status = napi_get_value_uint32(NodeContext.context.env, value, &pValue)
+        if status != napi_ok {
+            throw NodeError.msg("String")
+        } else {
+            self = UInt(pValue)
+        }
+    }
+
+    @MainActor public var nativeValue: NativeValue {
+        var value: napi_value?
+        let pValue: UInt32 = UInt32(self)
+        let status = napi_create_uint32(env, pValue, &value)
+        return .double(value, status == napi_ok)
+    }
+}
+extension Int32: @preconcurrency ValueConvertible, @unchecked Sendable {
+
+    @MainActor public init?(_ value: napi_value) throws {
+        var pValue: Int32 = 0
+        let status = napi_get_value_int32(NodeContext.context.env, value, &pValue)
+        if status != napi_ok {
+            throw NodeError.msg("String")
+        } else {
+            self = pValue
+        }
+    }
+
+    @MainActor public var nativeValue: NativeValue {
+        var value: napi_value?
+        let status = napi_create_int32(env, self, &value)
+        return .double(value, status == napi_ok)
+    }
+}
+
+extension UInt32: @preconcurrency ValueConvertible, @unchecked Sendable {
+
+    @MainActor public init?(_ value: napi_value) throws {
+        var pValue: UInt32 = 0
+        let status = napi_get_value_uint32(NodeContext.context.env, value, &pValue)
+        if status != napi_ok {
+            throw NodeError.msg("String")
+        } else {
+            self = pValue
+        }
+    }
+
+    @MainActor public var nativeValue: NativeValue {
+        var value: napi_value?
+        let status = napi_create_uint32(env, self, &value)
+        return .double(value, status == napi_ok)
+    }
+}
+extension Int64: @preconcurrency ValueConvertible, @unchecked Sendable {
+
+    @MainActor public init?(_ value: napi_value) throws {
+        var pValue: Int64 = 0
+        let status = napi_get_value_int64(NodeContext.context.env, value, &pValue)
+        if status != napi_ok {
+            throw NodeError.msg("String")
+        } else {
+            self = pValue
+        }
+    }
+
+    @MainActor public var nativeValue: NativeValue {
+        var value: napi_value?
+        let status = napi_create_int64(env, self, &value)
+        return .double(value, status == napi_ok)
+    }
+}
+extension UInt64: @preconcurrency ValueConvertible, @unchecked Sendable {
+
+    @MainActor public init?(_ value: napi_value) throws {
+        var pValue: UInt64 = 0
+        var lossless = true
+        let status = napi_get_value_bigint_uint64(
+            NodeContext.context.env, value, &pValue, &lossless)
+        if status != napi_ok {
+            throw NodeError.msg("String")
+        } else {
+            self = pValue
+        }
+    }
+
+    @MainActor public var nativeValue: NativeValue {
+        var value: napi_value?
+        let status = napi_create_bigint_uint64(env, self, &value)
+        return .double(value, status == napi_ok)
     }
 }

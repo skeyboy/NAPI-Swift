@@ -77,10 +77,6 @@ public class Function: @preconcurrency ValueConvertible, @unchecked Sendable {
     @MainActor public var nativeValue: NativeValue {
         return .function(value, value != nil)
     }
-
-    func apply(_ env: napi_env!, _ cbinfo: napi_callback_info!) {
-
-    }
 }
 
 @_cdecl("swift_napi_callback")
