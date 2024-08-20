@@ -7,7 +7,7 @@
     "test": "node hello.js",
     "nodeTest": "node swift_node_demo.js",
     "postinstall": "swift build -c release -Xlinker -undefined -Xlinker dynamic_lookup && mv .build/x86_64-apple-macosx/release/libHelloWorld.dylib .build/x86_64-apple-macosx/release/HelloWorld.node",
-    "nodePostinstall": "swift build -c release -Xlinker -undefined -Xlinker dynamic_lookup && cp .build/x86_64-apple-macosx/release/libSwiftNodeDemo.dylib .build/x86_64-apple-macosx/release/SwiftNodeDemo.node"
-
+    "nodePostinstall": "npm run build:swift && cp .build/x86_64-apple-macosx/release/libSwiftNodeDemo.dylib .build/x86_64-apple-macosx/release/SwiftNodeDemo.node",
+    "build:swift":"swift build -c release -Xlinker -undefined -Xlinker dynamic_lookup -Xswiftc -diagnostic-style=llvm"
   }
 }

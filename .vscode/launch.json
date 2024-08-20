@@ -1,0 +1,89 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+      {
+        "type": "lldb",
+        "request": "launch",
+        "name": "Hello Launch Program",
+        "preLaunchTask": "npm: postinstall",
+        "program": "/usr/local/bin/node",
+        "args": [
+           "${workspaceRoot}/hello.js"
+        ]
+     },
+     {
+      "type": "lldb",
+      "request": "launch",
+      "name": "swift_node_demo Launch Program",
+      "preLaunchTask": "npm: nodePostinstall",
+      "program": "/usr/local/bin/node",
+      "args": [
+         "${workspaceRoot}/swift_node_demo.js"
+      ]
+   },
+      {
+        "name": "C++ Launch",
+        "type": "cppdbg",
+        "request": "launch",
+        "program": "/usr/local/bin/node",  //node vm地址
+        "args": ["hello.js"], //宿主js地址
+        "stopAtEntry": false,
+        "cwd": "${workspaceRoot}",
+        "environment": [],
+        "externalConsole": true,
+        "linux": {
+          "MIMode": "gdb",
+          "setupCommands": [
+            {
+              "description": "Enable pretty-printing for gdb",
+              "text": "-enable-pretty-printing",
+              "ignoreFailures": true
+            }
+          ]
+        },
+        "osx": {
+          "MIMode": "lldb"
+        },
+        "windows": {
+          "MIMode": "gdb",
+          "setupCommands": [
+            {
+              "description": "Enable pretty-printing for gdb",
+              "text": "-enable-pretty-printing",
+              "ignoreFailures": true
+            }
+          ]
+        }
+      },
+      {
+        "name": "C++ Attach",
+        "type": "cppdbg",
+        "request": "attach",
+        "program": "${workspaceRoot}/.build/Release/HelloWorld.node", //插件地址
+        "processId": "${command:pickProcess}", //进程id
+        "linux": {
+          "MIMode": "gdb",
+          "setupCommands": [
+            {
+              "description": "Enable pretty-printing for gdb",
+              "text": "-enable-pretty-printing",
+              "ignoreFailures": true
+            }
+          ]
+        },
+        "osx": {
+          "MIMode": "lldb"
+        },
+        "windows": {
+          "MIMode": "gdb",
+          "setupCommands": [
+            {
+              "description": "Enable pretty-printing for gdb",
+              "text": "-enable-pretty-printing",
+              "ignoreFailures": true
+            }
+          ]
+        }
+      }
+    ]
+  }
